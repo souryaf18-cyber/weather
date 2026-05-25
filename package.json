@@ -1,0 +1,16 @@
+{
+  "name": "skywatch-relay",
+  "version": "1.0.0",
+  "description": "WebSocket reverse proxy relay for SkyWatch Pro ESP32 weather station",
+  "main": "relay.js",
+  "scripts": {
+    "start": "node relay.js",
+    "dev":   "node --watch relay.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}
