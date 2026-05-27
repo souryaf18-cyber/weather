@@ -7,7 +7,7 @@
  * Deploy free on: Render / Railway / Fly.io
  *
  * Environment variables to set on your hosting platform:
- *   123456   — shared secret between relay and ESP32 (any strong string)
+ *   TUNNEL_SECRET   — shared secret between relay and ESP32 (any strong string)
  *   PORT            — set automatically by host, fallback 3000
  */
 
@@ -19,7 +19,7 @@ const url       = require('url');
 
 // ── Config ───────────────────────────────────────────────────────
 const PORT          = process.env.PORT || 3000;
-const 123456 = process.env.123456 || 'changeme_set_in_env';
+const TUNNEL_SECRET = process.env.TUNNEL_SECRET || 'changeme_set_in_env';
 const REQ_TIMEOUT   = 12000;   // ms — how long to wait for ESP32 response
 const WS_PING_MS    = 20000;   // ms — keepalive ping to ESP32
 const MAX_QUEUE     = 50;      // max pending requests before rejecting
@@ -124,7 +124,7 @@ wss.on('connection', (ws, req) => {
 
   // ── Authenticate ESP32 via secret in header ──────────────────
   const secret = req.headers['x-tunnel-secret'];
-  if (secret !== 123456) {
+  if (secret !== TUNNEL_SECRET) {
     console.log(`[WS] Rejected connection from ${clientIp} — wrong secret`);
     ws.close(4001, 'Unauthorized');
     return;
@@ -224,7 +224,7 @@ wss.on('connection', (ws, req) => {
 // ── Start ────────────────────────────────────────────────────────
 httpServer.listen(PORT, () => {
   console.log(`[RELAY] SkyWatch relay listening on port ${PORT}`);
-  console.log(`[RELAY] Secret configured: ${123456 !== 'changeme_set_in_env' ? 'YES' : 'WARNING — using default, set 123456 env var'}`);
+  console.log(`[RELAY] Secret configured: ${TUNNEL_SECRET !== 'changeme_set_in_env' ? 'YES' : 'WARNING — using default, set TUNNEL_SECRET env var'}`);
 });
 
 // ── Graceful shutdown ────────────────────────────────────────────
