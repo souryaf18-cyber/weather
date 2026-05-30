@@ -473,6 +473,129 @@ body {
 .raw-table tr:hover td { background:rgba(255,255,255,.02); }
 .raw-val { font-family:var(--mono); font-size:12px; font-weight:500; color:var(--cyan); }
 .raw-tag { font-family:var(--mono); font-size:10px; }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — mobile-first breakpoints
+   ══════════════════════════════════════════════════════ */
+
+/* ── Mobile bottom nav (replaces topbar nav on small screens) ── */
+.mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 0;
+}
+.mobile-nav-inner {
+  display: flex; justify-content: space-around; align-items: stretch;
+  height: 56px;
+}
+.mobile-nav-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text3);
+  cursor: pointer; transition: color .15s; padding: 6px 4px;
+  border: none; background: none;
+}
+.mobile-nav-btn.active { color: var(--blue); }
+.mobile-nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Tablet: 768px ─────────────────────────────────── */
+@media (max-width: 1100px) {
+  .cc-row1 { grid-template-columns: 1fr 1fr; }
+  .cc-row2 { grid-template-columns: 1fr 1fr; }
+  .cc-row3 { grid-template-columns: repeat(3,1fr); }
+  .settings-grid { grid-template-columns: 1fr 1fr; }
+  .charts-grid { grid-template-columns: 1fr 1fr; }
+  .chart-card.wide { grid-column: span 2; }
+  .chart-card.full { grid-column: span 2; }
+}
+
+/* ── Mobile: 640px ─────────────────────────────────── */
+@media (max-width: 640px) {
+
+  /* topbar — hide nav + right section, show only logo + clock */
+  .topbar { height: 48px; }
+  .topbar-nav { display: none; }
+  .topbar-right { border-left: none; padding: 0 12px; gap: 10px; }
+  .topbar-logo { padding: 0 12px; gap: 8px; }
+  .logo-text { font-size: 13px; }
+  .logo-ver { display: none; }
+  #sensor-lbl { display: none; }
+  #topbar-clock { font-size: 12px; }
+
+  /* bottom nav visible on mobile */
+  .mobile-nav { display: block; }
+
+  /* views: tighter padding, account for bottom nav */
+  .view { padding: 12px 10px 76px; }
+
+  /* all grids collapse to single column */
+  .cc-row1, .cc-row2, .cc-row4 { grid-template-columns: 1fr; }
+  .cc-row3 { grid-template-columns: repeat(2,1fr); }
+  .settings-grid { grid-template-columns: 1fr; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .chart-card.wide, .chart-card.full { grid-column: span 1; }
+
+  /* hero temp: smaller number */
+  .hero-temp-num { font-size: 52px; }
+  .hero-temp-unit { font-size: 22px; }
+
+  /* gauges: side by side in one row on mobile */
+  .gauge-row-mobile {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* wind card: stack compass + data vertically */
+  .wind-inner { flex-direction: column !important; align-items: flex-start !important; }
+  .compass-wrap { width: 90px !important; height: 90px !important; }
+
+  /* LED table: single column on mobile (too wide) */
+  .led-table { font-size: 9px; }
+  .led-table td { padding: 5px 6px; }
+
+  /* raw table: hide extra columns */
+  .raw-table th:nth-child(4),
+  .raw-table th:nth-child(5),
+  .raw-table th:nth-child(6),
+  .raw-table td:nth-child(4),
+  .raw-table td:nth-child(5),
+  .raw-table td:nth-child(6) { display: none; }
+
+  /* terminal: shorter on mobile */
+  .term-body { height: 150px; font-size: 10px; }
+
+  /* bnum: scale down */
+  .bnum { font-size: 36px; }
+  .tile-val { font-size: 22px; }
+
+  /* charts: shorter on mobile */
+  .chart-card { height: 200px; }
+  .chart-card.full { height: 170px; }
+
+  /* alert strip: wrap text */
+  .alert-strip { flex-wrap: wrap; font-size: 10px; }
+
+  /* stat rows: slightly smaller */
+  .stat-row { font-size: 10px; }
+
+  /* card body padding */
+  .card-body { padding: 10px 12px; }
+  .card-head { padding: 8px 12px 6px; }
+}
+
+/* ── Very small phones: 380px ──────────────────────── */
+@media (max-width: 380px) {
+  .cc-row3 { grid-template-columns: 1fr 1fr; }
+  .hero-temp-num { font-size: 44px; }
+  .bnum { font-size: 30px; }
+  .tile-val { font-size: 20px; }
+  .logo-text { font-size: 11px; }
+}
+
 </style>
 </head>
 <body>
@@ -502,6 +625,24 @@ body {
       <span style="font-size:10px;color:var(--text3)" id="sensor-lbl">--</span>
     </div>
     <div id="topbar-clock">--:--:--</div>
+  </div>
+</div>
+
+<!-- ══════════════════ MOBILE BOTTOM NAV ══════════════════════ -->
+<div class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-btn active" id="mnav-cc" onclick="tab('v_cc',this,'mnav-cc')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="mobile-nav-btn" id="mnav-cht" onclick="tab('v_cht',this,'mnav-cht')">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Charts
+    </button>
+    <button class="mobile-nav-btn" id="mnav-sys" onclick="tab('v_sys',this,'mnav-sys')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Config
+    </button>
   </div>
 </div>
 
@@ -561,7 +702,7 @@ body {
       </div>
 
       <!-- Humidity + Pressure gauges stacked -->
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="gauge-row-mobile" style="display:flex;flex-direction:column;gap:12px">
         <div class="card">
           <div class="card-head"><span class="card-title">Humidity</span></div>
           <div class="card-body" style="padding:10px 14px 14px">
@@ -1091,13 +1232,27 @@ setInterval(() => {
 }, 1000);
 
 /* ── Tabs ───────────────────────────────────────────────── */
-function tab(id, el) {
+function tab(id, el, mobileId) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $(id).classList.add('active');
+  // Desktop nav
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
+  if(el && el.classList.contains('nav-btn')) el.classList.add('active');
+  // Mobile nav
+  document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.remove('active'));
+  if(mobileId) { const mb=$(mobileId); if(mb) mb.classList.add('active'); }
+  else if(el && el.classList.contains('mobile-nav-btn')) el.classList.add('active');
   if(id==='v_cht') loadCharts();
 }
+
+// Sync desktop nav onclick to also update mobile nav
+document.querySelectorAll('.nav-btn').forEach((btn,i) => {
+  const mids = ['mnav-cc','mnav-cht','mnav-sys'];
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.remove('active'));
+    const mb=$(mids[i]); if(mb) mb.classList.add('active');
+  });
+});
 
 /* ── Arc gauge ──────────────────────────────────────────── */
 function setArc(id, pct) {
