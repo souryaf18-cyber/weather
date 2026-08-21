@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,14 +64,6 @@ body {
   0%   { box-shadow: 0 0 0 0   rgba(255,255,255,0.25); }
   70%  { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
   100% { box-shadow: 0 0 0 0   rgba(255,255,255,0); }
-}
-@keyframes led-idle {
-  0%,100% { opacity:1; }
-  50%      { opacity:0.55; }
-}
-@keyframes scan {
-  0%   { top: -2px; }
-  100% { top: 100%; }
 }
 
 /* ── TOPBAR ─────────────────────────────────────────── */
@@ -158,7 +149,7 @@ body {
 .cc-outer { display: flex; flex-direction: column; gap: 12px; }
 .cc-row1  { display: grid; grid-template-columns: 260px 1fr 1fr 1fr; gap: 12px; }
 .cc-row2  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.cc-row3  { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; }
+.cc-row3  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .cc-row4  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── CARD ───────────────────────────────────────────── */
@@ -329,7 +320,7 @@ body {
 }
 .aqi-seg.inactive { opacity:0.25; }
 .aqi-seg::after {
-  content:'▲'; position:absolute;
+  content:'&#9650;'; position:absolute;
   bottom:-13px; left:50%; transform:translateX(-50%);
   font-size:7px; color:var(--text); display:none;
 }
@@ -344,12 +335,6 @@ body {
   flex:1; border-radius:1px 1px 0 0;
   transition:height .25s ease;
   min-height: 2px;
-}
-
-/* ── PRESSURE TREND ARROW ───────────────────────────── */
-.trend-arrow {
-  font-size: 20px; line-height:1;
-  transition: color .3s;
 }
 
 /* ── SEPARATOR ──────────────────────────────────────── */
@@ -473,146 +458,23 @@ body {
 .raw-table tr:hover td { background:rgba(255,255,255,.02); }
 .raw-val { font-family:var(--mono); font-size:12px; font-weight:500; color:var(--cyan); }
 .raw-tag { font-family:var(--mono); font-size:10px; }
-
-/* ══════════════════════════════════════════════════════
-   RESPONSIVE — mobile-first breakpoints
-   ══════════════════════════════════════════════════════ */
-
-/* ── Mobile bottom nav (replaces topbar nav on small screens) ── */
-.mobile-nav {
-  display: none;
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  padding: 0;
-}
-.mobile-nav-inner {
-  display: flex; justify-content: space-around; align-items: stretch;
-  height: 56px;
-}
-.mobile-nav-btn {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 3px;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--text3);
-  cursor: pointer; transition: color .15s; padding: 6px 4px;
-  border: none; background: none;
-}
-.mobile-nav-btn.active { color: var(--blue); }
-.mobile-nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-/* ── Tablet: 768px ─────────────────────────────────── */
-@media (max-width: 1100px) {
-  .cc-row1 { grid-template-columns: 1fr 1fr; }
-  .cc-row2 { grid-template-columns: 1fr 1fr; }
-  .cc-row3 { grid-template-columns: repeat(3,1fr); }
-  .settings-grid { grid-template-columns: 1fr 1fr; }
-  .charts-grid { grid-template-columns: 1fr 1fr; }
-  .chart-card.wide { grid-column: span 2; }
-  .chart-card.full { grid-column: span 2; }
-}
-
-/* ── Mobile: 640px ─────────────────────────────────── */
-@media (max-width: 640px) {
-
-  /* topbar — hide nav + right section, show only logo + clock */
-  .topbar { height: 48px; }
-  .topbar-nav { display: none; }
-  .topbar-right { border-left: none; padding: 0 12px; gap: 10px; }
-  .topbar-logo { padding: 0 12px; gap: 8px; }
-  .logo-text { font-size: 13px; }
-  .logo-ver { display: none; }
-  #sensor-lbl { display: none; }
-  #topbar-clock { font-size: 12px; }
-
-  /* bottom nav visible on mobile */
-  .mobile-nav { display: block; }
-
-  /* views: tighter padding, account for bottom nav */
-  .view { padding: 12px 10px 76px; }
-
-  /* all grids collapse to single column */
-  .cc-row1, .cc-row2, .cc-row4 { grid-template-columns: 1fr; }
-  .cc-row3 { grid-template-columns: repeat(2,1fr); }
-  .settings-grid { grid-template-columns: 1fr; }
-  .charts-grid { grid-template-columns: 1fr; }
-  .chart-card.wide, .chart-card.full { grid-column: span 1; }
-
-  /* hero temp: smaller number */
-  .hero-temp-num { font-size: 52px; }
-  .hero-temp-unit { font-size: 22px; }
-
-  /* gauges: side by side in one row on mobile */
-  .gauge-row-mobile {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  /* wind card: stack compass + data vertically */
-  .wind-inner { flex-direction: column !important; align-items: flex-start !important; }
-  .compass-wrap { width: 90px !important; height: 90px !important; }
-
-  /* LED table: single column on mobile (too wide) */
-  .led-table { font-size: 9px; }
-  .led-table td { padding: 5px 6px; }
-
-  /* raw table: hide extra columns */
-  .raw-table th:nth-child(4),
-  .raw-table th:nth-child(5),
-  .raw-table th:nth-child(6),
-  .raw-table td:nth-child(4),
-  .raw-table td:nth-child(5),
-  .raw-table td:nth-child(6) { display: none; }
-
-  /* terminal: shorter on mobile */
-  .term-body { height: 150px; font-size: 10px; }
-
-  /* bnum: scale down */
-  .bnum { font-size: 36px; }
-  .tile-val { font-size: 22px; }
-
-  /* charts: shorter on mobile */
-  .chart-card { height: 200px; }
-  .chart-card.full { height: 170px; }
-
-  /* alert strip: wrap text */
-  .alert-strip { flex-wrap: wrap; font-size: 10px; }
-
-  /* stat rows: slightly smaller */
-  .stat-row { font-size: 10px; }
-
-  /* card body padding */
-  .card-body { padding: 10px 12px; }
-  .card-head { padding: 8px 12px 6px; }
-}
-
-/* ── Very small phones: 380px ──────────────────────── */
-@media (max-width: 380px) {
-  .cc-row3 { grid-template-columns: 1fr 1fr; }
-  .hero-temp-num { font-size: 44px; }
-  .bnum { font-size: 30px; }
-  .tile-val { font-size: 20px; }
-  .logo-text { font-size: 11px; }
-}
-
 </style>
 </head>
 <body>
 
-<!-- ══════════════════ TOPBAR ══════════════════════════════ -->
 <div class="topbar">
   <div class="topbar-logo">
     <div class="logo-diamond"></div>
     <div>
       <div class="logo-text">SKYWATCH PRO</div>
     </div>
-    <div class="logo-ver">v16.2</div>
+    <div class="logo-ver">v19.0</div>
   </div>
 
   <div class="topbar-nav">
     <div class="nav-btn active" onclick="tab('v_cc',this)">Command Center</div>
     <div class="nav-btn" onclick="tab('v_cht',this)">Data Archive</div>
+    <div class="nav-btn" onclick="tab('v_diag',this)">Hardware Monitor</div>
     <div class="nav-btn" onclick="tab('v_sys',this)">System Config</div>
   </div>
 
@@ -628,58 +490,35 @@ body {
   </div>
 </div>
 
-<!-- ══════════════════ MOBILE BOTTOM NAV ══════════════════════ -->
-<div class="mobile-nav">
-  <div class="mobile-nav-inner">
-    <button class="mobile-nav-btn active" id="mnav-cc" onclick="tab('v_cc',this,'mnav-cc')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </button>
-    <button class="mobile-nav-btn" id="mnav-cht" onclick="tab('v_cht',this,'mnav-cht')">
-      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Charts
-    </button>
-    <button class="mobile-nav-btn" id="mnav-sys" onclick="tab('v_sys',this,'mnav-sys')">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      Config
-    </button>
-  </div>
-</div>
-
-<!-- ══════════════════ COMMAND CENTER ══════════════════════ -->
 <div id="v_cc" class="view active">
-  <!-- Alert strip -->
   <div class="alert-strip" id="alert-strip">
-    <span class="alert-icon">⚠</span>
-    <span id="alert-text">—</span>
+    <span class="alert-icon">&#9888;</span>
+    <span id="alert-text">--</span>
   </div>
 
   <div class="cc-outer">
 
-    <!-- ROW 1: Hero + Gauges + Wind + AQI -->
     <div class="cc-row1">
-
-      <!-- Hero Temperature -->
       <div class="card hero-card">
         <div class="card-head">
           <span class="card-title">Ambient Temperature</span>
-          <span class="card-badge badge-blue" id="active-sensor-badge">—</span>
+          <span class="card-badge badge-blue" id="active-sensor-badge">--</span>
         </div>
         <div class="card-body">
           <div>
-            <div class="hero-temp-num"><span id="t">--</span><span class="hero-temp-unit">°C</span></div>
-            <div class="hero-forecast" id="fc" style="margin-top:8px">Initializing…</div>
+            <div class="hero-temp-num"><span id="t">--</span><span class="hero-temp-unit">C</span></div>
+            <div class="hero-forecast" id="fc" style="margin-top:8px">Initializing...</div>
           </div>
           <div class="hero-meta">
-            Dew Point&nbsp;&nbsp;<span id="dp">--</span> °C<br>
+            Dew Point&nbsp;&nbsp;<span id="dp">--</span> C<br>
             Cloud Base&nbsp;<span id="lcl">--</span> m AGL<br>
-            Heat Index&nbsp;<span id="hi-hero">--</span> °C
+            Heat Index&nbsp;<span id="hi-hero">--</span> C
           </div>
           <div class="range-bar-wrap">
             <div class="range-bar-labels">
-              <span>Lo <span id="tl">--</span>°</span>
+              <span>Lo <span id="tl">--</span></span>
               <span style="color:var(--text3)">Daily Range</span>
-              <span>Hi <span id="th">--</span>°</span>
+              <span>Hi <span id="th">--</span></span>
             </div>
             <div class="range-bar-track">
               <div class="range-bar-fill"></div>
@@ -689,7 +528,7 @@ body {
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
             <div>
               <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">P-Trend</div>
-              <div style="font-family:var(--cond);font-size:22px;font-weight:700;margin-top:2px" id="p-trend-disp">—</div>
+              <div style="font-family:var(--cond);font-size:22px;font-weight:700;margin-top:2px" id="p-trend-disp">--</div>
               <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">hPa / 3 hr</div>
             </div>
             <div>
@@ -701,8 +540,7 @@ body {
         </div>
       </div>
 
-      <!-- Humidity + Pressure gauges stacked -->
-      <div class="gauge-row-mobile" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:12px">
         <div class="card">
           <div class="card-head"><span class="card-title">Humidity</span></div>
           <div class="card-body" style="padding:10px 14px 14px">
@@ -743,7 +581,6 @@ body {
         </div>
       </div>
 
-      <!-- Wind -->
       <div class="card">
         <div class="card-head">
           <span class="card-title">Wind System</span>
@@ -755,17 +592,14 @@ body {
               <svg viewBox="0 0 110 110">
                 <circle cx="55" cy="55" r="50" fill="none" stroke="var(--border2)" stroke-width="0.5"/>
                 <circle cx="55" cy="55" r="38" fill="none" stroke="var(--border2)" stroke-width="0.5"/>
-                <!-- Cardinal ticks -->
                 <line x1="55" y1="5"   x2="55" y2="14"  stroke="var(--border)" stroke-width="1.5"/>
                 <line x1="55" y1="96"  x2="55" y2="105" stroke="var(--border)" stroke-width="1"/>
                 <line x1="5"  y1="55"  x2="14" y2="55"  stroke="var(--border)" stroke-width="1"/>
                 <line x1="96" y1="55"  x2="105" y2="55" stroke="var(--border)" stroke-width="1"/>
-                <!-- Labels -->
                 <text x="55" y="20" text-anchor="middle" fill="var(--blue)" font-family="'IBM Plex Mono'" font-size="9" font-weight="600">N</text>
                 <text x="55" y="105" text-anchor="middle" fill="var(--text3)" font-family="'IBM Plex Mono'" font-size="8">S</text>
                 <text x="105" y="58" text-anchor="middle" fill="var(--text3)" font-family="'IBM Plex Mono'" font-size="8">E</text>
                 <text x="5"  y="58" text-anchor="middle" fill="var(--text3)" font-family="'IBM Plex Mono'" font-size="8">W</text>
-                <!-- Needle -->
                 <g id="compass-needle" transform="rotate(0,55,55)">
                   <polygon points="55,16 51,56 55,62 59,56" fill="var(--blue)" opacity="0.9"/>
                   <polygon points="55,94 51,56 55,62 59,56" fill="var(--text3)" opacity="0.5"/>
@@ -801,7 +635,6 @@ body {
         </div>
       </div>
 
-      <!-- Air Quality -->
       <div class="card">
         <div class="card-head">
           <span class="card-title">Air Quality</span>
@@ -824,7 +657,7 @@ body {
             <div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
                 <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">PM2.5</span>
-                <span style="font-family:var(--cond);font-size:22px;font-weight:700;color:var(--orange)" id="pm">-- <span style="font-family:var(--sans);font-size:11px;color:var(--text3)">µg/m³</span></span>
+                <span style="font-family:var(--cond);font-size:22px;font-weight:700;color:var(--orange)" id="pm">-- <span style="font-family:var(--sans);font-size:11px;color:var(--text3)">ug/m3</span></span>
               </div>
               <div style="height:3px;background:var(--border);border-radius:2px">
                 <div id="pm-bar" style="height:100%;border-radius:2px;background:var(--orange);width:0%;transition:width 1s ease"></div>
@@ -832,7 +665,7 @@ body {
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
-                <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">eCO₂</span>
+                <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">eCO2</span>
                 <span style="font-family:var(--cond);font-size:22px;font-weight:700;color:var(--purple)" id="co2">-- <span style="font-family:var(--sans);font-size:11px;color:var(--text3)">ppm</span></span>
               </div>
               <div style="height:3px;background:var(--border);border-radius:2px">
@@ -847,17 +680,14 @@ body {
             </div>
             <div class="stat-row">
               <span class="stat-key">Feels Like</span>
-              <span class="stat-val" id="feels-like">-- °C</span>
+              <span class="stat-val" id="feels-like">-- C</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ROW 2: Acoustic + Lightning + RGB LED + System Health -->
     <div class="cc-row2" style="grid-template-columns:1fr 1fr 1.6fr">
-
-      <!-- Acoustic -->
       <div class="card">
         <div class="card-head"><span class="card-title">Acoustic Level</span></div>
         <div class="card-body">
@@ -873,7 +703,6 @@ body {
         </div>
       </div>
 
-      <!-- Lightning -->
       <div class="card">
         <div class="card-head">
           <span class="card-title">AS3935 Lightning</span>
@@ -881,7 +710,7 @@ body {
         </div>
         <div class="card-body" style="display:flex;flex-direction:column;justify-content:space-between;height:calc(100% - 41px)">
           <div style="display:flex;align-items:center;gap:14px;margin-top:4px">
-            <div id="ltg-bolt" style="font-size:44px;line-height:1;opacity:.2;transition:opacity .3s,filter .3s">⚡</div>
+            <div id="ltg-bolt" style="font-size:44px;line-height:1;opacity:.2;transition:opacity .3s,filter .3s">&#9889;</div>
             <div>
               <div style="font-family:var(--cond);font-size:38px;font-weight:700;color:var(--amber);line-height:1" id="ltg-dist">--</div>
               <div style="font-family:var(--mono);font-size:11px;color:var(--text3)" id="ltg-unit">km away</div>
@@ -894,87 +723,49 @@ body {
         </div>
       </div>
 
-      <!-- ████ RGB LED STATUS PANEL ████ -->
       <div class="card">
         <div class="card-head">
-          <span class="card-title">Onboard RGB LED — Status Indicator</span>
+          <span class="card-title">Onboard RGB LED - Status Indicator</span>
           <span class="card-badge badge-blue" id="led-mode-badge">IDLE</span>
         </div>
         <div class="led-panel-body">
-          <!-- Live preview -->
           <div class="led-preview">
             <div class="led-orb" id="led-orb"></div>
             <div>
-              <div class="led-state-title" id="led-title">Initializing…</div>
+              <div class="led-state-title" id="led-title">Initializing...</div>
               <div class="led-state-reason" id="led-reason">Waiting for first data poll.</div>
             </div>
           </div>
           <div class="led-divider"></div>
-          <!-- Full legend table -->
           <table class="led-table" id="led-legend">
             <tbody>
               <tr id="led-row-ota">
-                <td>
-                  <span class="led-swatch" style="background:#0000ff;box-shadow:0 0 5px #0000ff"></span>
-                  <span class="led-cond-cell">Solid Blue — flash</span>
-                </td>
+                <td><span class="led-swatch" style="background:#0000ff;box-shadow:0 0 5px #0000ff"></span><span class="led-cond-cell">Solid Blue - flash</span></td>
                 <td class="led-desc-cell">OTA firmware update in progress. Interrupts detached; sensor loop paused until reboot.</td>
               </tr>
               <tr id="led-row-ap">
-                <td>
-                  <span class="led-swatch" style="background:#ff0000;box-shadow:0 0 5px #f00"></span>
-                  <span class="led-cond-cell">Red/Blue blink</span>
-                </td>
-                <td class="led-desc-cell">AP Fallback mode (state 4). Wi-Fi connection failed; broadcasting "SkyWatch_Setup" hotspot.</td>
-              </tr>
-              <tr id="led-row-log">
-                <td>
-                  <span class="led-swatch" style="background:#800080;box-shadow:0 0 5px #800080"></span>
-                  <span class="led-cond-cell">Solid Purple</span>
-                </td>
-                <td class="led-desc-cell">Cloud sync active (state 5). Writing to SD + FFat and pushing to ThingSpeak / Blynk.</td>
-              </tr>
-              <tr id="led-row-setup">
-                <td>
-                  <span class="led-swatch" style="background:#ff6400;box-shadow:0 0 5px #ff6400"></span>
-                  <span class="led-cond-cell">Orange blink</span>
-                </td>
-                <td class="led-desc-cell">Connecting to Wi-Fi (state 2). Boot sequence in progress; will retry for ~5 seconds.</td>
+                <td><span class="led-swatch" style="background:#ff0000;box-shadow:0 0 5px #f00"></span><span class="led-cond-cell">Red/Blue blink</span></td>
+                <td class="led-desc-cell">AP Fallback mode. Wi-Fi connection failed; broadcasting hotspot.</td>
               </tr>
               <tr id="led-row-gust">
-                <td>
-                  <span class="led-swatch" style="background:#ff00ff;box-shadow:0 0 5px #f0f"></span>
-                  <span class="led-cond-cell">Magenta blink</span>
-                </td>
+                <td><span class="led-swatch" style="background:#ff00ff;box-shadow:0 0 5px #f0f"></span><span class="led-cond-cell">Magenta blink</span></td>
                 <td class="led-desc-cell">Wind gust exceeds 60 km/h. High-wind alert. Gust currently: <span id="led-gust-val">--</span> km/h.</td>
               </tr>
               <tr id="led-row-rain">
-                <td>
-                  <span class="led-swatch" style="background:#00ffff;box-shadow:0 0 5px #0ff"></span>
-                  <span class="led-cond-cell">Cyan pulse</span>
-                </td>
-                <td class="led-desc-cell">Rain plate active — precipitation detected. Sensor pin LOW on GPIO 16.</td>
+                <td><span class="led-swatch" style="background:#00ffff;box-shadow:0 0 5px #0ff"></span><span class="led-cond-cell">Cyan pulse</span></td>
+                <td class="led-desc-cell">Rain plate active - precipitation detected. Sensor pin LOW on GPIO 16.</td>
               </tr>
               <tr id="led-row-danger">
-                <td>
-                  <span class="led-swatch" style="background:#ff0000;box-shadow:0 0 5px #f00"></span>
-                  <span class="led-cond-cell">Solid Red</span>
-                </td>
-                <td class="led-desc-cell">Danger threshold: Temperature &gt; 40 °C or AQI &gt; 200. Immediate attention required.</td>
+                <td><span class="led-swatch" style="background:#ff0000;box-shadow:0 0 5px #f00"></span><span class="led-cond-cell">Solid Red</span></td>
+                <td class="led-desc-cell">Danger threshold: Temperature &gt; 40 C or AQI &gt; 200. Immediate attention required.</td>
               </tr>
               <tr id="led-row-warn">
-                <td>
-                  <span class="led-swatch" style="background:#ffb400;box-shadow:0 0 5px #fa0"></span>
-                  <span class="led-cond-cell">Solid Amber</span>
-                </td>
-                <td class="led-desc-cell">Warning threshold: Temperature 35–40 °C or AQI 101–200. Elevated conditions.</td>
+                <td><span class="led-swatch" style="background:#ffb400;box-shadow:0 0 5px #fa0"></span><span class="led-cond-cell">Solid Amber</span></td>
+                <td class="led-desc-cell">Warning threshold: Temperature 35-40 C or AQI 101-200. Elevated conditions.</td>
               </tr>
               <tr id="led-row-ok">
-                <td>
-                  <span class="led-swatch" style="background:#00ff00;box-shadow:0 0 5px #0f0"></span>
-                  <span class="led-cond-cell">Solid Green</span>
-                </td>
-                <td class="led-desc-cell">All clear. Temperature ≤ 35 °C, AQI ≤ 100, no rain, no gust alert, online.</td>
+                <td><span class="led-swatch" style="background:#00ff00;box-shadow:0 0 5px #0f0"></span><span class="led-cond-cell">Solid Green</span></td>
+                <td class="led-desc-cell">All clear. Temperature &lt; 35 C, AQI &lt; 100, no rain, no gust alert, online.</td>
               </tr>
             </tbody>
           </table>
@@ -982,8 +773,22 @@ body {
       </div>
     </div>
 
-    <!-- ROW 3: Mini Tiles -->
+    <!-- 8 Tiles wrapped in a 4x2 grid via repeat(4,1fr) -->
     <div class="cc-row3">
+      <div class="card tile-card">
+        <div class="card-head"><span class="card-title">Solar Array</span></div>
+        <div class="card-body">
+          <div class="tile-val" id="batt-v-tile"><span id="batt-v-val">--</span><span class="tile-unit">V</span></div>
+          <div class="tile-sub" id="batt-v-sub">System power</div>
+        </div>
+      </div>
+      <div class="card tile-card">
+        <div class="card-head"><span class="card-title">Ambient Light</span></div>
+        <div class="card-body">
+          <div class="tile-val" id="lux-tile"><span id="lux-val">--</span><span class="tile-unit">lx</span></div>
+          <div class="tile-sub" id="lux-sub">Photon capture</div>
+        </div>
+      </div>
       <div class="card tile-card">
         <div class="card-head"><span class="card-title">Sea-Level Pressure</span></div>
         <div class="card-body">
@@ -992,9 +797,16 @@ body {
         </div>
       </div>
       <div class="card tile-card">
+        <div class="card-head"><span class="card-title">Peak Wind Gust</span></div>
+        <div class="card-body">
+          <div class="tile-val" style="color:var(--orange)" id="wg2">--<span class="tile-unit">km/h</span></div>
+          <div class="tile-sub">Session maximum</div>
+        </div>
+      </div>
+      <div class="card tile-card">
         <div class="card-head"><span class="card-title">Dew Point</span></div>
         <div class="card-body">
-          <div class="tile-val" style="color:var(--teal)" id="dp2">--<span class="tile-unit">°C</span></div>
+          <div class="tile-val" style="color:var(--teal)" id="dp2">--<span class="tile-unit">C</span></div>
           <div class="tile-sub">Condensation threshold</div>
         </div>
       </div>
@@ -1003,13 +815,6 @@ body {
         <div class="card-body">
           <div class="tile-val" style="color:var(--text2)" id="lcl2">--<span class="tile-unit">m</span></div>
           <div class="tile-sub">Lifted condensation level</div>
-        </div>
-      </div>
-      <div class="card tile-card">
-        <div class="card-head"><span class="card-title">Peak Wind Gust</span></div>
-        <div class="card-body">
-          <div class="tile-val" style="color:var(--orange)" id="wg2">--<span class="tile-unit">km/h</span></div>
-          <div class="tile-sub">Session maximum</div>
         </div>
       </div>
       <div class="card tile-card">
@@ -1028,7 +833,6 @@ body {
       </div>
     </div>
 
-    <!-- ROW 4: System Health + Terminal -->
     <div class="cc-row4">
       <div class="card">
         <div class="card-head"><span class="card-title">System Diagnostics</span></div>
@@ -1036,11 +840,11 @@ body {
           <div class="stat-row"><span class="stat-key">Active Sensor</span><span class="stat-val blue" id="active-sensor">--</span></div>
           <div class="stat-row"><span class="stat-key">I2C Latency</span><span class="stat-val green" id="i2c-lat">-- ms</span></div>
           <div class="stat-row"><span class="stat-key">WiFi RSSI</span><span class="stat-val" id="rssi">-- dBm</span></div>
-          <div class="stat-row"><span class="stat-key">Temp μ (AI)</span><span class="stat-val amber" id="t-mean">--</span></div>
-          <div class="stat-row"><span class="stat-key">Temp σ (AI)</span><span class="stat-val amber" id="t-std">--</span></div>
+          <div class="stat-row"><span class="stat-key">Temp u (AI)</span><span class="stat-val amber" id="t-mean">--</span></div>
+          <div class="stat-row"><span class="stat-key">Temp s (AI)</span><span class="stat-val amber" id="t-std">--</span></div>
           <div class="stat-row"><span class="stat-key">Temp Z-score</span><span class="stat-val" id="t-z">--</span></div>
-          <div class="stat-row"><span class="stat-key">Pres μ (AI)</span><span class="stat-val amber" id="p-mean">--</span></div>
-          <div class="stat-row"><span class="stat-key">Pres σ (AI)</span><span class="stat-val amber" id="p-std">--</span></div>
+          <div class="stat-row"><span class="stat-key">Pres u (AI)</span><span class="stat-val amber" id="p-mean">--</span></div>
+          <div class="stat-row"><span class="stat-key">Pres s (AI)</span><span class="stat-val amber" id="p-std">--</span></div>
           <div class="stat-row"><span class="stat-key">Pres Z-score</span><span class="stat-val" id="p-z">--</span></div>
           <div class="sep"></div>
           <div class="stat-row"><span class="stat-key">MQ135 ADC</span><span class="stat-val cyan" id="r_mq">--</span></div>
@@ -1051,7 +855,6 @@ body {
         </div>
       </div>
 
-      <!-- Terminal -->
       <div class="card">
         <div class="card-head"><span class="card-title">Live Telemetry Stream</span><span class="card-badge badge-green">AI ACTIVE</span></div>
         <div class="term-head">
@@ -1063,64 +866,67 @@ body {
           <span style="margin-left:auto;color:var(--text3);font-family:var(--mono);font-size:10px">2 s poll</span>
         </div>
         <div class="term-body" id="sys-console">
-          <div><span class="t-ts">[BOOT] </span><span class="t-sys">SYS</span> Establishing link…</div>
+          <div><span class="t-ts">[BOOT] </span><span class="t-sys">SYS</span> Establishing link...</div>
         </div>
       </div>
     </div>
 
-  </div><!-- cc-outer -->
-</div><!-- v_cc -->
+  </div>
+</div>
 
-<!-- ══════════════════ DATA ARCHIVE ════════════════════════ -->
 <div id="v_cht" class="view">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <div>
       <div style="font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.05em">Data Archive</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">Local FFat rolling history — refreshes every 60 s</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">Local FFat rolling history</div>
     </div>
-    <button onclick="window.location.href='/history'" class="btn primary" style="width:auto">↓ Export CSV</button>
+    <button onclick="window.location.href='/history'" class="btn primary" style="width:auto">Export CSV</button>
   </div>
   <div class="charts-grid">
     <div class="card chart-card wide">
-      <div class="card-head"><span class="card-title">01 — Temperature Trend (°C)</span></div>
+      <div class="card-head"><span class="card-title">01 - Temperature Trend (C)</span></div>
       <div class="card-body"><canvas id="c1"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">02 — Relative Humidity (%)</span></div>
+      <div class="card-head"><span class="card-title">02 - Relative Humidity (%)</span></div>
       <div class="card-body"><canvas id="c2"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">03 — Barometric Pressure (hPa)</span></div>
+      <div class="card-head"><span class="card-title">03 - Barometric Pressure (hPa)</span></div>
       <div class="card-body"><canvas id="c3"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">04 — Wind Velocity (km/h)</span></div>
+      <div class="card-head"><span class="card-title">04 - Wind Velocity (km/h)</span></div>
       <div class="card-body"><canvas id="c4"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">05 — eCO₂ Estimate (ppm)</span></div>
+      <div class="card-head"><span class="card-title">05 - eCO2 Estimate (ppm)</span></div>
       <div class="card-body"><canvas id="c5"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">06 — PM2.5 Density (µg/m³)</span></div>
+      <div class="card-head"><span class="card-title">06 - PM2.5 Density (ug/m3)</span></div>
       <div class="card-body"><canvas id="c6"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">07 — Rain Plate Events</span></div>
+      <div class="card-head"><span class="card-title">07 - Rain Plate Events</span></div>
       <div class="card-body"><canvas id="c7"></canvas></div>
     </div>
     <div class="card chart-card">
-      <div class="card-head"><span class="card-title">08 — AI Anomaly Blocks</span></div>
+      <div class="card-head"><span class="card-title">08 - AI Anomaly Blocks</span></div>
       <div class="card-body"><canvas id="c8"></canvas></div>
     </div>
     <div class="card chart-card full">
-      <div class="card-head"><span class="card-title">09 — Acoustic Ambient Level (dB SPL)</span></div>
+      <div class="card-head"><span class="card-title">09 - Acoustic Ambient Level (dB SPL)</span></div>
       <div class="card-body"><canvas id="c9"></canvas></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════ SYSTEM CONFIG ═══════════════════════ -->
+<div id="v_diag" class="view">
+  <div style="font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.05em;margin-bottom:14px">Hardware Diagnostics</div>
+  <iframe src="/diag" style="width:100%; height:80vh; border:none; border-radius:6px;"></iframe>
+</div>
+
 <div id="v_sys" class="view">
   <div style="font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.05em;margin-bottom:14px">System Configuration</div>
   <div class="settings-grid">
@@ -1130,7 +936,7 @@ body {
         <div class="field-label">WiFi SSID</div>
         <input class="field-input" id="ssid" placeholder="Network name">
         <div class="field-label">WiFi Password</div>
-        <input class="field-input" id="pass" type="password" placeholder="••••••••">
+        <input class="field-input" id="pass" type="password" placeholder="********">
         <div class="field-label">ThingSpeak API Key</div>
         <input class="field-input" id="key" placeholder="16-character key">
       </div>
@@ -1140,38 +946,38 @@ body {
       <div class="card-body">
         <div class="field-label">Wind Multiplier</div>
         <input class="field-input" id="wo" placeholder="Default: 1.0">
-        <div class="field-label">MQ135 Load Resistor (kΩ)</div>
+        <div class="field-label">MQ135 Load Resistor (kOhm)</div>
         <input class="field-input" id="rl" placeholder="Default: 10.0">
-        <div class="field-label">Temperature Offset (°C)</div>
-        <input class="field-input" id="to" placeholder="+/−">
+        <div class="field-label">Temperature Offset (C)</div>
+        <input class="field-input" id="to" placeholder="+/-">
         <div class="field-label">Humidity Offset (%)</div>
-        <input class="field-input" id="ho" placeholder="+/−">
+        <input class="field-input" id="ho" placeholder="+/-">
         <div class="field-label">Pressure Offset (hPa)</div>
-        <input class="field-input" id="po" placeholder="+/−">
-        <div class="field-label">PM2.5 Offset (µg)</div>
-        <input class="field-input" id="do" placeholder="+/−">
+        <input class="field-input" id="po" placeholder="+/-">
+        <div class="field-label">PM2.5 Offset (ug)</div>
+        <input class="field-input" id="do" placeholder="+/-">
       </div>
     </div>
     <div class="card">
       <div class="card-head"><span class="card-title">Operations</span></div>
       <div class="card-body">
-        <button class="btn primary" onclick="save()">⟳ Save & Reboot System</button>
-        <button class="btn amber-btn" onclick="calMQ()">◈ Calibrate MQ135 Baseline</button>
-        <button class="btn" onclick="window.location.href='/update'">↑ Push OTA Firmware</button>
-        <button class="btn" onclick="window.location.href='/download'">↓ Download SD Log CSV</button>
+        <button class="btn primary" onclick="save()">Save (Hot Apply)</button>
+        <button class="btn red-btn" onclick="reboot()">Reboot System</button>
+        <button class="btn amber-btn" onclick="calMQ()">Calibrate MQ135 Baseline</button>
+        <button class="btn" onclick="window.location.href='/update'">Push OTA Firmware</button>
+        <button class="btn" onclick="window.location.href='/download'">Download SD Log CSV</button>
         <div class="sep" style="margin-top:14px"></div>
         <div style="font-family:var(--mono);font-size:11px;color:var(--text3);line-height:2.2">
-          <div>Node ID&nbsp;&nbsp;&nbsp;: <span style="color:var(--text2)">SKYWATCH-ROOF</span></div>
-          <div>Firmware : <span style="color:var(--blue)">v16.2-ROBUST</span></div>
-          <div>Platform : <span style="color:var(--text2)">ESP32-S3</span></div>
-          <div>OTA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span style="color:var(--text2)">Arduino Native</span></div>
-          <div>Cloud&nbsp;&nbsp;&nbsp;&nbsp;: <span style="color:var(--text2)">Blynk + ThingSpeak</span></div>
+          <div>Node ID   : <span style="color:var(--text2)">SKYWATCH-ROOF</span></div>
+          <div>Firmware : <span style="color:var(--blue)">v19.0</span></div>
+          <div>Platform : <span style="color:var(--text2)">ESP32-S3 (N16R8)</span></div>
+          <div>OTA      : <span style="color:var(--text2)">ElegantOTA</span></div>
+          <div>Cloud    : <span style="color:var(--text2)">Blynk + ThingSpeak</span></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Raw table -->
   <div class="card" style="margin-top:12px">
     <div class="card-head">
       <span class="card-title">Live Hardware Node Outputs</span>
@@ -1216,14 +1022,13 @@ body {
   </div>
 </div>
 
-<!-- ══════════════════ JAVASCRIPT ══════════════════════════ -->
 <script>
 const $  = id => document.getElementById(id);
 const sv = (v, d=1) => (v == null || v === '' || isNaN(v)) ? '--' : Number(v).toFixed(d);
 const st = (id, v)  => { const e=$(id); if(e) e.innerText = v; };
 const sh = (id, v)  => { const e=$(id); if(e) e.innerHTML = v; };
 
-/* ── Clock + Uptime ─────────────────────────────────────── */
+/* -- Clock + Uptime -- */
 const bootTime = Date.now();
 setInterval(() => {
   $('topbar-clock').innerText = new Date().toLocaleTimeString('en-GB',{hour12:false});
@@ -1231,43 +1036,26 @@ setInterval(() => {
   st('uptime', `${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor((s%3600)/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`);
 }, 1000);
 
-/* ── Tabs ───────────────────────────────────────────────── */
-function tab(id, el, mobileId) {
+/* -- Tabs -- */
+function tab(id, el) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $(id).classList.add('active');
-  // Desktop nav
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  if(el && el.classList.contains('nav-btn')) el.classList.add('active');
-  // Mobile nav
-  document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.remove('active'));
-  if(mobileId) { const mb=$(mobileId); if(mb) mb.classList.add('active'); }
-  else if(el && el.classList.contains('mobile-nav-btn')) el.classList.add('active');
+  el.classList.add('active');
   if(id==='v_cht') loadCharts();
 }
 
-// Sync desktop nav onclick to also update mobile nav
-document.querySelectorAll('.nav-btn').forEach((btn,i) => {
-  const mids = ['mnav-cc','mnav-cht','mnav-sys'];
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.remove('active'));
-    const mb=$(mids[i]); if(mb) mb.classList.add('active');
-  });
-});
-
-/* ── Arc gauge ──────────────────────────────────────────── */
 function setArc(id, pct) {
   const el=$(id); if(!el) return;
   el.style.strokeDashoffset = 251 - (251 * Math.min(Math.max(pct,0),1));
 }
 
-/* ── Compass ────────────────────────────────────────────── */
 const DIR_ANGLES = {N:0,NE:45,E:90,SE:135,S:180,SW:225,W:270,NW:315};
 function setCompass(dir) {
   const a = DIR_ANGLES[dir] ?? 0;
   const n = $('compass-needle'); if(n) n.setAttribute('transform',`rotate(${a},55,55)`);
 }
 
-/* ── dB bars ────────────────────────────────────────────── */
 let dbHist = Array(24).fill(0);
 function updateDb(v) {
   dbHist.push(v); dbHist.shift();
@@ -1281,7 +1069,6 @@ function updateDb(v) {
   }).join('');
 }
 
-/* ── AQI scale ──────────────────────────────────────────── */
 function setAqiScale(aqi) {
   let seg = 0;
   if(aqi>50)  seg=1; if(aqi>100) seg=2;
@@ -1293,24 +1080,19 @@ function setAqiScale(aqi) {
   }
 }
 
-/* ── Heat index (Rothfusz) ──────────────────────────────── */
 function heatIndex(T,H) {
   if(T<27) return T;
-  return -8.78469 + 1.61139*T + 2.33855*H - 0.14612*T*H
-    - 0.01231*T*T - 0.01642*H*H + 0.00221*T*T*H
-    + 0.00073*T*H*H - 0.00000358*T*T*H*H;
+  return -8.78469 + 1.61139*T + 2.33855*H - 0.14612*T*H - 0.01231*T*T - 0.01642*H*H + 0.00221*T*T*H + 0.00073*T*H*H - 0.00000358*T*T*H*H;
 }
 
-/* ── Visibility estimate ────────────────────────────────── */
 function visEst(pm, rain) {
   if(rain)    return '< 5 km';
   if(pm>150)  return '< 3 km';
-  if(pm>75)   return '5–10 km';
-  if(pm>35)   return '10–20 km';
+  if(pm>75)   return '5-10 km';
+  if(pm>35)   return '10-20 km';
   return '> 20 km';
 }
 
-/* ── dB class ───────────────────────────────────────────── */
 function dbClass(db) {
   if(db<30)  return 'Very Quiet';
   if(db<50)  return 'Quiet';
@@ -1319,22 +1101,7 @@ function dbClass(db) {
   return 'Very Loud';
 }
 
-/* ── RGB LED STATE RESOLVER ─────────────────────────────── */
-/*
-  Mirrors updateRGB() logic from the .ino exactly:
-  Priority order (highest → lowest):
-  1. system_state == 4  → AP mode (Red/Blue blink)
-  2. system_state == 2  → Wi-Fi connecting (Orange blink)
-  3. system_state == 5  → Cloud sync (Purple solid)
-  4. wind_gust > 60     → Magenta blink
-  5. is_raining         → Cyan pulse
-  6. temp > 40 || aqi > 200 → Red solid
-  7. temp > 35 || aqi > 100 → Amber solid
-  8. else               → Green solid
-  OTA is overlaid: ota_running → Blue solid (not in JSON, checked separately)
-*/
 function resolveLED(d) {
-  // We infer system_state from available data signals:
   const raining   = !!d.rain_status;
   const gust      = parseFloat(d.wind_gust) || 0;
   const temp      = parseFloat(d.temperature) || 0;
@@ -1342,45 +1109,13 @@ function resolveLED(d) {
   const rssi      = parseInt(d.wifi_rssi);
   const online    = !isNaN(rssi) && rssi !== 0;
 
-  // AP mode: very poor RSSI / offline
-  if(!online) return {
-    r:255,g:0,b:0, label:'AP Fallback Mode',
-    reason:'No Wi-Fi connection. ESP32 is broadcasting the "SkyWatch_Setup" hotspot for reconfiguration.',
-    rowId:'led-row-ap', badge:'AP MODE', badgeCls:'badge-red'
-  };
-
-  // Cloud sync is transient — shown by purple (state 5),
-  // we can't detect it reliably from JSON; skip in live view.
-
-  if(gust > 60) return {
-    r:255,g:0,b:255, label:'High-Wind Gust Alert',
-    reason:`Wind gust exceeds 60 km/h threshold. Current peak: ${sv(d.wind_gust,1)} km/h. LED blinks magenta at 2 Hz.`,
-    rowId:'led-row-gust', badge:'GUST ALERT', badgeCls:'badge-red'
-  };
-
-  if(raining) return {
-    r:0,g:255,b:255, label:'Precipitation Detected',
-    reason:'Rain plate sensor active — GPIO 16 pulled LOW. LED pulses cyan at 1 Hz.',
-    rowId:'led-row-rain', badge:'RAIN', badgeCls:'badge-cyan'
-  };
-
-  if(temp > 40 || aqi > 200) return {
-    r:255,g:0,b:0, label:'Danger Threshold Exceeded',
-    reason:`Critical condition: ${temp>40?'Temperature '+sv(d.temperature,1)+'°C > 40°C':''}${temp>40&&aqi>200?' and ':''}${aqi>200?'AQI '+aqi+' > 200':''}. LED solid red.`,
-    rowId:'led-row-danger', badge:'DANGER', badgeCls:'badge-red'
-  };
-
-  if(temp > 35 || aqi > 100) return {
-    r:255,g:180,b:0, label:'Warning Threshold',
-    reason:`Elevated condition: ${temp>35?'Temperature '+sv(d.temperature,1)+'°C (35–40 range)':''}${temp>35&&aqi>100?' and ':''}${aqi>100?'AQI '+aqi+' (101–200 range)':''}. LED solid amber.`,
-    rowId:'led-row-warn', badge:'WARN', badgeCls:'badge-amber'
-  };
-
-  return {
-    r:0,g:255,b:0, label:'All Clear — Normal Operation',
-    reason:'All parameters within safe thresholds. Wi-Fi online, no precipitation, no gust alert. LED solid green.',
-    rowId:'led-row-ok', badge:'NOMINAL', badgeCls:'badge-green'
-  };
+  if(!online) return { r:255,g:0,b:0, label:'AP Fallback Mode', reason:'No Wi-Fi connection.', rowId:'led-row-ap', badge:'AP MODE', badgeCls:'badge-red' };
+  if(gust > 60) return { r:255,g:0,b:255, label:'High-Wind Gust Alert', reason:`Gust exceeds 60 km/h: ${sv(d.wind_gust,1)} km/h.`, rowId:'led-row-gust', badge:'GUST ALERT', badgeCls:'badge-red' };
+  if(raining) return { r:0,g:255,b:255, label:'Precipitation Detected', reason:'Rain plate active.', rowId:'led-row-rain', badge:'RAIN', badgeCls:'badge-cyan' };
+  if(temp > 40 || aqi > 200) return { r:255,g:0,b:0, label:'Danger Threshold Exceeded', reason:'Critical Temp or AQI.', rowId:'led-row-danger', badge:'DANGER', badgeCls:'badge-red' };
+  if(temp > 35 || aqi > 100) return { r:255,g:180,b:0, label:'Warning Threshold', reason:'Elevated Temp or AQI.', rowId:'led-row-warn', badge:'WARN', badgeCls:'badge-amber' };
+  
+  return { r:0,g:255,b:0, label:'Normal Operation', reason:'All parameters safe.', rowId:'led-row-ok', badge:'NOMINAL', badgeCls:'badge-green' };
 }
 
 function updateLED(d) {
@@ -1397,74 +1132,65 @@ function updateLED(d) {
   st('led-reason', state.reason);
   st('led-gust-val', sv(d.wind_gust,1));
 
-  // Badge
   const badge = $('led-mode-badge');
   if(badge) { badge.className='card-badge '+state.badgeCls; badge.innerText=state.badge; }
 
-  // Highlight active row in legend
   document.querySelectorAll('#led-legend tr').forEach(r=>r.classList.remove('led-active-row'));
   const activeRow = $(state.rowId);
   if(activeRow) activeRow.classList.add('led-active-row');
 }
 
-/* ── Alerts ─────────────────────────────────────────────── */
 function checkAlerts(d) {
   const msgs = [];
-  if(parseFloat(d.temperature) > 40)  msgs.push('HIGH TEMP: '+sv(d.temperature,1)+'°C');
+  if(parseFloat(d.temperature) > 40)  msgs.push('HIGH TEMP: '+sv(d.temperature,1)+' C');
   if(parseInt(d.aqi) > 150)           msgs.push('UNHEALTHY AIR: AQI '+d.aqi);
   if(d.ltg_dist>0 && d.ltg_dist<20)   msgs.push('LIGHTNING: '+d.ltg_dist+' km');
-  if(parseFloat(d.co2) > 1000)        msgs.push('ELEVATED CO₂: '+sv(d.co2,0)+' ppm');
+  if(parseFloat(d.co2) > 1000)        msgs.push('ELEVATED CO2: '+sv(d.co2,0)+' ppm');
   const strip = $('alert-strip');
   if(msgs.length) { strip.classList.add('show'); st('alert-text', msgs.join('   |   ')); }
   else              strip.classList.remove('show');
 }
 
-/* ── Main fetch ─────────────────────────────────────────── */
+/* -- Main fetch -- */
 let logN = 0;
 function fetchData() {
   fetch('/data').then(r=>r.json()).then(d => {
 
-    // Temperature
     st('t',  sv(d.temperature,1));
     st('th', sv(d.temp_hi,0));
     st('tl', sv(d.temp_lo,0));
     st('fc', d.forecast||'STABLE');
-    st('dp', sv(d.dew_point,1)); st('dp2', sv(d.dew_point,1)+'°C');
+    st('dp', sv(d.dew_point,1)); st('dp2', sv(d.dew_point,1)+'C');
     st('lcl', sv(d.lcl,0)); st('lcl2', sv(d.lcl,0));
     const hi = heatIndex(parseFloat(d.temperature)||0, parseFloat(d.humidity)||0);
     st('hi-hero', isNaN(hi)?'--':hi.toFixed(1));
-    st('feels-like', (isNaN(hi)?'--':hi.toFixed(1))+' °C');
+    st('feels-like', (isNaN(hi)?'--':hi.toFixed(1))+' C');
 
-    // Range bar pin
     const lo=parseFloat(d.temp_lo)||0, hi2=parseFloat(d.temp_hi)||0, cur=parseFloat(d.temperature)||0;
     const pct = Math.max(0,Math.min(100, ((cur-lo)/Math.max(hi2-lo,1))*100));
     const pin=$('temp-pin'); if(pin) pin.style.left=pct+'%';
 
-    // Pressure trend
     const pt=parseFloat(d.p_trend)||0;
-    const ptArrow = pt>0.5?'↑ '+sv(d.p_trend,2) : pt<-0.5?'↓ '+sv(d.p_trend,2) : '→ '+sv(d.p_trend,2);
+    const ptArrow = pt>0.5?'+ '+sv(d.p_trend,2) : pt<-0.5?'- '+sv(d.p_trend,2) : '= '+sv(d.p_trend,2);
     const ptColor = pt>1?'var(--green)' : pt<-1?'var(--red)' : 'var(--amber)';
     const ptEl=$('p-trend-disp'); if(ptEl){ptEl.innerText=ptArrow;ptEl.style.color=ptColor;}
     st('p-trend-sub','Trend: '+(pt>0?'+':'')+sv(d.p_trend,2)+' hPa/3hr');
     st('ai-blocks', d.ai_glitches??0);
 
-    // Gauges
     setArc('hum-arc',  (parseFloat(d.humidity)||0)/100);
     const pMin=980,pMax=1040;
     setArc('pres-arc', ((parseFloat(d.pressure_mslp)||1013)-pMin)/(pMax-pMin));
     st('h', sv(d.humidity,0));
     st('p', sv(d.pressure_mslp,1)); st('p2', sv(d.pressure_mslp,1));
 
-    // Wind
     st('w',  sv(d.wind_speed,1));
     st('wg', sv(d.wind_gust,1)+' km/h'); st('wg2', sv(d.wind_gust,1));
     st('d',  d.wind_dir||'--');
     st('bf', d.wind_beaufort||'--'); st('bf-badge', d.wind_beaufort||'--');
     setCompass(d.wind_dir);
     const rnEl=$('rn-stat');
-    if(rnEl){rnEl.innerText=d.rain_status?'⬤ Precipitation':'○ Dry';rnEl.className='stat-val '+(d.rain_status?'cyan':'');}
+    if(rnEl){rnEl.innerText=d.rain_status?'Precipitation':'Dry';rnEl.className='stat-val '+(d.rain_status?'cyan':'');}
 
-    // AQI
     const aqi=parseInt(d.aqi)||0;
     st('aqi-num', aqi); setAqiScale(aqi);
     const ab=$('aqi-badge');
@@ -1479,12 +1205,10 @@ function fetchData() {
     const co2Bar=$('co2-bar'); if(co2Bar) co2Bar.style.width = Math.min(((parseFloat(d.co2)||400)-400)/1600*100,100)+'%';
     st('vis-est', visEst(parseFloat(d.pm25)||0, d.rain_status));
 
-    // Acoustic
     const db=parseFloat(d.db_level)||0;
     st('mic', sv(d.db_level,1)); updateDb(db);
     st('db-class', dbClass(db));
 
-    // Lightning
     const ltgActive = d.ltg_dist > 0;
     const bolt=$('ltg-bolt');
     if(bolt){bolt.style.opacity=ltgActive?'1':'0.15';bolt.style.filter=ltgActive?'drop-shadow(0 0 12px var(--amber))':'none';}
@@ -1495,10 +1219,21 @@ function fetchData() {
     if(lb){lb.className='card-badge '+(ltgActive?'badge-amber':'');lb.style.background=ltgActive?'':'rgba(71,85,105,.15)';lb.style.color=ltgActive?'':'var(--text3)';lb.style.border=ltgActive?'':'1px solid var(--border)';lb.innerText=ltgActive?d.ltg_dist+' KM':'STANDBY';}
     if(ltgActive){const ls=$('ltg-hw-stat');if(ls){ls.className='card-badge badge-red raw-tag';ls.innerText='ACTIVE';}}
 
-    // RGB LED panel
+    // NEW LOGIC: Solar Array and Lux Rendering
+    const bv = parseFloat(d.battery_v) || 0;
+    st('batt-v-val', sv(bv, 1));
+    const bT = $('batt-v-tile');
+    if(bT) bT.style.color = bv > 13.5 ? 'var(--green)' : bv < 11.5 ? 'var(--red)' : 'var(--blue)';
+    st('batt-v-sub', bv > 13.5 ? 'Active Charging' : bv < 11.5 ? 'Low Voltage' : 'Stable Discharge');
+
+    const lx = parseFloat(d.lux) || 0;
+    st('lux-val', sv(lx, 0));
+    const lxT = $('lux-tile');
+    if(lxT) lxT.style.color = lx > 10000 ? 'var(--orange)' : lx > 50 ? 'var(--amber)' : 'var(--text3)';
+    st('lux-sub', lx > 10 ? 'Daylight Detected' : 'Twilight/Night');
+
     updateLED(d);
 
-    // System health
     st('active-sensor', d.active_sensor||'--'); st('active-sensor-badge', d.active_sensor||'--');
     st('i2c-lat', (d.i2c_ms??'--')+' ms');
     const rssiVal=parseInt(d.wifi_rssi);
@@ -1510,7 +1245,6 @@ function fetchData() {
     st('t-mean', sv(d.t_mean,2)); st('t-std', sv(d.t_std,3)); st('t-z', sv(d.t_z,2));
     st('p-mean', sv(d.p_mean,2)); st('p-std', sv(d.p_std,3)); st('p-z', sv(d.p_z,2));
 
-    // Raw ADC
     st('r_mq',  sv(d.raw_mq,0)); st('r_mq2',  sv(d.raw_mq,0));
     st('v_mq',  sv(d.volt_mq,3)+'V'); st('v_mq2', sv(d.volt_mq,3));
     st('r_pm',  sv(d.raw_pm,0)); st('r_pm2',  sv(d.raw_pm,0));
@@ -1518,20 +1252,17 @@ function fetchData() {
     const vane=`${d.raw_hn??'-'}|${d.raw_he??'-'}|${d.raw_hs??'-'}|${d.raw_hw??'-'}`;
     st('r_vane',vane); st('r_vane2',vane);
 
-    // Net dot
     $('net-dot').className='conn-dot';
     st('net-lbl','ONLINE');
     st('sensor-lbl', d.active_sensor||'--');
 
-    // Alerts
     checkAlerts(d);
 
-    // Terminal
     const now=new Date().toLocaleTimeString('en-GB',{hour12:false});
     const tOk=parseFloat(d.t_z)<=3, pOk=parseFloat(d.p_z)<=3;
     const tS=tOk?`<span class="t-ok">PASS Z=${sv(d.t_z,2)}</span>`:`<span class="t-warn">BLOCKED Z=${sv(d.t_z,2)}</span>`;
     const pS=pOk?`<span class="t-ok">PASS Z=${sv(d.p_z,2)}</span>`:`<span class="t-warn">BLOCKED Z=${sv(d.p_z,2)}</span>`;
-    const line=`<div><span class="t-ts">[${now}] </span><span class="t-sys">SYS</span> <span class="t-data">I2C:${d.i2c_ms}ms RSSI:${d.wifi_rssi}dBm</span> — <span class="t-ai">AI·T:</span>${tS} <span class="t-ai">AI·P:</span>${pS} — <span class="t-pred">▶ ${d.forecast||'STABLE'}</span> Δ${sv(d.p_trend,2)}hPa</div>`;
+    const line=`<div><span class="t-ts">[${now}] </span><span class="t-sys">SYS</span> <span class="t-data">I2C:${d.i2c_ms}ms RSSI:${d.wifi_rssi}dBm 12V_BUS:${sv(d.battery_v, 2)}V</span> :: <span class="t-ai">AI-T:</span>${tS} <span class="t-ai">AI-P:</span>${pS} :: <span class="t-pred">>> ${d.forecast||'STABLE'}</span></div>`;
     const con=$('sys-console');
     if(con){if(logN===0)con.innerHTML='';con.innerHTML=line+con.innerHTML;if(con.innerHTML.length>7000)con.innerHTML=con.innerHTML.slice(0,7000);logN++;}
 
@@ -1541,7 +1272,6 @@ function fetchData() {
   });
 }
 
-/* ── Charts ─────────────────────────────────────────────── */
 Chart.defaults.color='#475569';
 Chart.defaults.font.family="'IBM Plex Mono', monospace";
 Chart.defaults.font.size=10;
@@ -1580,7 +1310,6 @@ function loadCharts() {
   }).catch(()=>{});
 }
 
-/* ── Settings ───────────────────────────────────────────── */
 fetch('/api/set').then(r=>r.json()).then(d=>{
   ['wo','rl','to','ho','po','do'].forEach((id,i)=>$(id).value=[d.wCal,d.rlVal,d.tOff,d.hOff,d.pOff,d.dOff][i]);
   $('ssid').value=d.ssid; $('key').value=d.key;
@@ -1589,14 +1318,28 @@ fetch('/api/set').then(r=>r.json()).then(d=>{
 function save(){
   const p=new URLSearchParams();
   [['wo','wCal'],['rl','rlVal'],['to','tOff'],['ho','hOff'],['po','pOff'],['do','dOff'],['ssid','ssid'],['pass','pass'],['key','key']].forEach(([id,k])=>p.append(k,$(id).value));
-  fetch('/save',{method:'POST',body:p}).then(r=>r.text()).then(t=>{alert(t);setTimeout(()=>location.reload(),3000);});
+  fetch('/save',{method:'POST',body:p}).then(r=>r.text()).then(t=>{
+    alert(t);
+  }).catch(alert);
 }
+
+function reboot() {
+  if(confirm("Are you sure you want to restart the SkyWatch weather station?")) {
+    document.querySelector('.red-btn').innerText = 'Rebooting...';
+    fetch('/reboot', { method: 'POST' })
+      .then(r => r.text())
+      .then(msg => {
+        alert(msg + " Please wait 15 seconds...");
+      })
+      .catch(err => alert("Error communicating with station: " + err));
+  }
+}
+
 function calMQ(){
   if(confirm('Confirm: Are you outdoors in clean fresh air?'))
     fetch('/api/cal_mq').then(r=>r.text()).then(alert);
 }
 
-/* ── Boot ───────────────────────────────────────────────── */
 fetchData();
 loadCharts();
 setInterval(fetchData,  2000);
