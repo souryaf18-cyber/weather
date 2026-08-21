@@ -37,10 +37,9 @@ try {
 }
 
 // ── API paths that must be forwarded to ESP32 ─────────────────────
-// Everything else is either served locally or rejected
 const ESP32_PATHS = new Set([
   '/data', '/save', '/history', '/download',
-  '/api/set', '/api/cal_mq', '/api/scan'
+  '/api/set', '/api/cal_mq', '/api/scan', '/api/diag' // <-- Added /api/diag
 ]);
 
 // ── State ─────────────────────────────────────────────────────────
