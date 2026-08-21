@@ -773,7 +773,6 @@ body {
       </div>
     </div>
 
-    <!-- 8 Tiles wrapped in a 4x2 grid via repeat(4,1fr) -->
     <div class="cc-row3">
       <div class="card tile-card">
         <div class="card-head"><span class="card-title">Solar Array</span></div>
@@ -835,27 +834,6 @@ body {
 
     <div class="cc-row4">
       <div class="card">
-        <div class="card-head"><span class="card-title">System Diagnostics</span></div>
-        <div class="card-body">
-          <div class="stat-row"><span class="stat-key">Active Sensor</span><span class="stat-val blue" id="active-sensor">--</span></div>
-          <div class="stat-row"><span class="stat-key">I2C Latency</span><span class="stat-val green" id="i2c-lat">-- ms</span></div>
-          <div class="stat-row"><span class="stat-key">WiFi RSSI</span><span class="stat-val" id="rssi">-- dBm</span></div>
-          <div class="stat-row"><span class="stat-key">Temp u (AI)</span><span class="stat-val amber" id="t-mean">--</span></div>
-          <div class="stat-row"><span class="stat-key">Temp s (AI)</span><span class="stat-val amber" id="t-std">--</span></div>
-          <div class="stat-row"><span class="stat-key">Temp Z-score</span><span class="stat-val" id="t-z">--</span></div>
-          <div class="stat-row"><span class="stat-key">Pres u (AI)</span><span class="stat-val amber" id="p-mean">--</span></div>
-          <div class="stat-row"><span class="stat-key">Pres s (AI)</span><span class="stat-val amber" id="p-std">--</span></div>
-          <div class="stat-row"><span class="stat-key">Pres Z-score</span><span class="stat-val" id="p-z">--</span></div>
-          <div class="sep"></div>
-          <div class="stat-row"><span class="stat-key">MQ135 ADC</span><span class="stat-val cyan" id="r_mq">--</span></div>
-          <div class="stat-row"><span class="stat-key">MQ135 Voltage</span><span class="stat-val cyan" id="v_mq">--</span></div>
-          <div class="stat-row"><span class="stat-key">PM2.5 ADC</span><span class="stat-val" id="r_pm">--</span></div>
-          <div class="stat-row"><span class="stat-key">Hall Speed</span><span class="stat-val" id="r_hspd">--</span></div>
-          <div class="stat-row"><span class="stat-key">Vane N|E|S|W</span><span class="stat-val" id="r_vane">-|-|-|-</span></div>
-        </div>
-      </div>
-
-      <div class="card">
         <div class="card-head"><span class="card-title">Live Telemetry Stream</span><span class="card-badge badge-green">AI ACTIVE</span></div>
         <div class="term-head">
           <div class="term-dot" style="background:#ff5f57"></div>
@@ -870,7 +848,6 @@ body {
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -923,8 +900,65 @@ body {
 </div>
 
 <div id="v_diag" class="view">
-  <div style="font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.05em;margin-bottom:14px">Hardware Diagnostics</div>
-  <iframe src="/diag" style="width:100%; height:80vh; border:none; border-radius:6px;"></iframe>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.05em">Hardware Diagnostics</div>
+    <button class="btn primary" onclick="fetchDiag()" style="width:auto">Refresh</button>
+  </div>
+  <div class="cc-row2">
+    <div class="card">
+      <div class="card-head"><span class="card-title">Core System & Memory</span></div>
+      <div class="card-body">
+        <div class="stat-row"><span class="stat-key">Uptime</span><span class="stat-val cyan" id="diag-up">--</span></div>
+        <div class="stat-row"><span class="stat-key">CPU Freq</span><span class="stat-val" id="diag-cpu">-- MHz</span></div>
+        <div class="stat-row"><span class="stat-key">Reset Reason</span><span class="stat-val" id="diag-rst">--</span></div>
+        <div class="sep" style="margin:10px 0"></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px">Heap RAM Usage</div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;margin-bottom:4px"><span id="diag-heap-txt">-- / -- KB</span><span class="cyan" id="diag-heap-pct">--%</span></div>
+        <div style="height:4px;background:var(--border);border-radius:2px"><div id="diag-heap-bar" style="height:100%;background:var(--blue);width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="card-title">Storage Subsystems</span></div>
+      <div class="card-body">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px"><span>MicroSD (SPI)</span><span id="diag-sd-stat">--</span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;margin-bottom:4px"><span id="diag-sd-txt">-- / -- MB</span><span class="green" id="diag-sd-pct">--%</span></div>
+        <div style="height:4px;background:var(--border);border-radius:2px"><div id="diag-sd-bar" style="height:100%;background:var(--green);width:0%"></div></div>
+        <div class="sep" style="margin:12px 0"></div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px">Internal Flash (FFat)</div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;margin-bottom:4px"><span id="diag-ffat-txt">-- / -- KB</span><span class="amber" id="diag-ffat-pct">--%</span></div>
+        <div style="height:4px;background:var(--border);border-radius:2px"><div id="diag-ffat-bar" style="height:100%;background:var(--amber);width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="card-title">Sensor Bus Health</span></div>
+      <div class="card-body">
+        <table class="raw-table">
+          <tr><th>Module</th><th>Bus</th><th>Status</th></tr>
+          <tr><td>BME280</td><td>I2C 0x76</td><td class="raw-val" id="diag-bme">--</td></tr>
+          <tr><td>BH1750</td><td>I2C 0x23</td><td class="raw-val" id="diag-bh">--</td></tr>
+          <tr><td>OLED</td><td>I2C 0x3C</td><td class="raw-val" style="color:var(--green)">DETECTED</td></tr>
+          <tr><td>SD Reader</td><td>SPI CS:14</td><td class="raw-val" id="diag-sdbus">--</td></tr>
+          <tr><td>DHT11</td><td>1-Wire</td><td class="raw-val" id="diag-dht">--</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="card-head"><span class="card-title">Raw Analog / GPIO States</span></div>
+    <div class="card-body">
+      <table class="raw-table">
+        <tr><th>Sensor / Line</th><th>Pin</th><th>Raw Value</th></tr>
+        <tr><td>12V Solar Battery</td><td><span class="card-badge badge-amber">ADC1 10</span></td><td class="raw-val" id="diag-r-batt">--</td></tr>
+        <tr><td>MQ135 Gas</td><td><span class="card-badge badge-amber">ADC1 4</span></td><td class="raw-val" id="diag-r-mq">--</td></tr>
+        <tr><td>Sharp PM2.5</td><td><span class="card-badge badge-amber">ADC1 8</span></td><td class="raw-val" id="diag-r-pm">--</td></tr>
+        <tr><td>Acoustic Mic</td><td><span class="card-badge badge-amber">ADC1 3</span></td><td class="raw-val" id="diag-r-mic">--</td></tr>
+        <tr><td>Wind Hall (Hz)</td><td><span class="card-badge badge-purple">INT 1</span></td><td class="raw-val" id="diag-r-wind">--</td></tr>
+        <tr><td>Rain Plate</td><td><span class="card-badge badge-cyan">DIG 16</span></td><td class="raw-val" id="diag-r-rain">--</td></tr>
+      </table>
+    </div>
+  </div>
 </div>
 
 <div id="v_sys" class="view">
@@ -977,58 +1011,13 @@ body {
       </div>
     </div>
   </div>
-
-  <div class="card" style="margin-top:12px">
-    <div class="card-head">
-      <span class="card-title">Live Hardware Node Outputs</span>
-      <span class="card-badge badge-cyan">LIVE</span>
-    </div>
-    <div class="card-body">
-      <table class="raw-table">
-        <thead>
-          <tr>
-            <th>Component</th><th>Output</th><th>Status</th>
-            <th>Component</th><th>Output</th><th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>MQ135 Gas Sensor</td>
-            <td class="raw-val"><span id="r_mq2">--</span></td>
-            <td><span class="card-badge badge-green raw-tag">NOMINAL</span></td>
-            <td>Hall Anemometer</td>
-            <td class="raw-val"><span id="r_hspd2">--</span></td>
-            <td><span class="card-badge badge-green raw-tag">ACTIVE</span></td>
-          </tr>
-          <tr>
-            <td>MQ135 Voltage</td>
-            <td class="raw-val"><span id="v_mq2">--</span> V</td>
-            <td><span class="card-badge badge-green raw-tag">LIVE</span></td>
-            <td>Wind Vane N|E|S|W</td>
-            <td class="raw-val"><span id="r_vane2">-|-|-|-</span></td>
-            <td><span class="card-badge badge-green raw-tag">ACTIVE</span></td>
-          </tr>
-          <tr>
-            <td>Sharp PM2.5 Laser</td>
-            <td class="raw-val"><span id="r_pm2">--</span></td>
-            <td><span class="card-badge badge-green raw-tag">NOMINAL</span></td>
-            <td>AS3935 Lightning</td>
-            <td class="raw-val" id="r_ltg2" style="color:var(--text3)">AWAITING</td>
-            <td><span id="ltg-hw-stat" class="card-badge badge-amber raw-tag">STANDBY</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 </div>
 
 <script>
 const $  = id => document.getElementById(id);
 const sv = (v, d=1) => (v == null || v === '' || isNaN(v)) ? '--' : Number(v).toFixed(d);
 const st = (id, v)  => { const e=$(id); if(e) e.innerText = v; };
-const sh = (id, v)  => { const e=$(id); if(e) e.innerHTML = v; };
 
-/* -- Clock + Uptime -- */
 const bootTime = Date.now();
 setInterval(() => {
   $('topbar-clock').innerText = new Date().toLocaleTimeString('en-GB',{hour12:false});
@@ -1036,13 +1025,13 @@ setInterval(() => {
   st('uptime', `${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor((s%3600)/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`);
 }, 1000);
 
-/* -- Tabs -- */
 function tab(id, el) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $(id).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   if(id==='v_cht') loadCharts();
+  if(id==='v_diag') fetchDiag();
 }
 
 function setArc(id, pct) {
@@ -1151,7 +1140,53 @@ function checkAlerts(d) {
   else              strip.classList.remove('show');
 }
 
-/* -- Main fetch -- */
+const resetReasons = {1:"POWERON_RESET",3:"SW_RESET",4:"OWDT_RESET",5:"DEEPSLEEP_RESET",6:"SDIO_RESET",7:"TG0WDT_SYS_RESET",8:"TG1WDT_SYS_RESET",9:"RTCWDT_SYS_RESET",12:"SW_CPU_RESET",14:"RTCWDT_CPU_RESET"};
+function fetchDiag() {
+  fetch('/api/diag').then(r=>r.json()).then(d => {
+    const s = d.uptime;
+    st('diag-up', `${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m ${s%60}s`);
+    st('diag-cpu', d.cpu_mhz + ' MHz');
+    st('diag-rst', resetReasons[d.reset_reason] || `UNKNOWN (${d.reset_reason})`);
+    
+    const hTot = d.heap_tot/1024, hUsed = (d.heap_tot - d.heap_free)/1024;
+    st('diag-heap-txt', `${hUsed.toFixed(0)} / ${hTot.toFixed(0)} KB`);
+    st('diag-heap-pct', `${((hUsed/hTot)*100).toFixed(1)}%`);
+    $('diag-heap-bar').style.width = `${(hUsed/hTot)*100}%`;
+
+    if(d.sd_ok) {
+      const sTot = d.sd_tot/(1024*1024), sUsed = d.sd_used/(1024*1024);
+      st('diag-sd-stat', 'MOUNTED'); $('diag-sd-stat').style.color = 'var(--green)';
+      st('diag-sdbus', 'OK'); $('diag-sdbus').style.color = 'var(--green)';
+      st('diag-sd-txt', `${sUsed.toFixed(1)} / ${sTot.toFixed(1)} MB`);
+      st('diag-sd-pct', `${((sUsed/sTot)*100).toFixed(1)}%`);
+      $('diag-sd-bar').style.width = `${(sUsed/sTot)*100}%`;
+    } else {
+      st('diag-sd-stat', 'UNMOUNTED'); $('diag-sd-stat').style.color = 'var(--red)';
+      st('diag-sdbus', 'FAIL'); $('diag-sdbus').style.color = 'var(--red)';
+    }
+
+    const fTot = d.ffat_tot/1024, fUsed = d.ffat_used/1024;
+    st('diag-ffat-txt', `${fUsed.toFixed(0)} / ${fTot.toFixed(0)} KB`);
+    st('diag-ffat-pct', `${((fUsed/fTot)*100).toFixed(1)}%`);
+    $('diag-ffat-bar').style.width = `${(fUsed/fTot)*100}%`;
+
+    const setStat = (id, valid) => { 
+      $(id).innerText = valid ? 'DETECTED' : 'TIMEOUT'; 
+      $(id).style.color = valid ? 'var(--green)' : 'var(--red)'; 
+    };
+    setStat('diag-bme', d.bme_ok);
+    setStat('diag-bh', d.bh_ok);
+    setStat('diag-dht', d.dht_ok);
+
+    st('diag-r-batt', `${d.raw_batt} (${((d.raw_batt/4095)*3.3).toFixed(2)}V)`);
+    st('diag-r-mq', d.raw_mq);
+    st('diag-r-pm', d.raw_pm);
+    st('diag-r-mic', d.raw_mic);
+    st('diag-r-wind', d.raw_wind === 0 ? 'LOW (Magnet)' : 'HIGH (Clear)');
+    st('diag-r-rain', d.raw_rain === 0 ? 'LOW (WET)' : 'HIGH (DRY)');
+  }).catch(()=>{});
+}
+
 let logN = 0;
 function fetchData() {
   fetch('/data').then(r=>r.json()).then(d => {
@@ -1219,7 +1254,6 @@ function fetchData() {
     if(lb){lb.className='card-badge '+(ltgActive?'badge-amber':'');lb.style.background=ltgActive?'':'rgba(71,85,105,.15)';lb.style.color=ltgActive?'':'var(--text3)';lb.style.border=ltgActive?'':'1px solid var(--border)';lb.innerText=ltgActive?d.ltg_dist+' KM':'STANDBY';}
     if(ltgActive){const ls=$('ltg-hw-stat');if(ls){ls.className='card-badge badge-red raw-tag';ls.innerText='ACTIVE';}}
 
-    // NEW LOGIC: Solar Array and Lux Rendering
     const bv = parseFloat(d.battery_v) || 0;
     st('batt-v-val', sv(bv, 1));
     const bT = $('batt-v-tile');
@@ -1233,24 +1267,6 @@ function fetchData() {
     st('lux-sub', lx > 10 ? 'Daylight Detected' : 'Twilight/Night');
 
     updateLED(d);
-
-    st('active-sensor', d.active_sensor||'--'); st('active-sensor-badge', d.active_sensor||'--');
-    st('i2c-lat', (d.i2c_ms??'--')+' ms');
-    const rssiVal=parseInt(d.wifi_rssi);
-    const rssiCol=rssiVal>-60?'green':rssiVal>-75?'amber':'red';
-    const rssiQ=rssiVal>-60?'Excellent':rssiVal>-75?'Good':rssiVal>-85?'Fair':'Poor';
-    const rssiEl=$('rssi'); if(rssiEl){rssiEl.innerText=(d.wifi_rssi??'--')+' dBm';rssiEl.className='stat-val '+rssiCol;}
-    const rssiT=$('rssi-tile'); if(rssiT){rssiT.innerHTML=(d.wifi_rssi??'--')+'<span class="tile-unit">dBm</span>';rssiT.style.color=rssiVal>-60?'var(--green)':rssiVal>-75?'var(--amber)':'var(--red)';}
-    st('rssi-quality', rssiQ+' signal');
-    st('t-mean', sv(d.t_mean,2)); st('t-std', sv(d.t_std,3)); st('t-z', sv(d.t_z,2));
-    st('p-mean', sv(d.p_mean,2)); st('p-std', sv(d.p_std,3)); st('p-z', sv(d.p_z,2));
-
-    st('r_mq',  sv(d.raw_mq,0)); st('r_mq2',  sv(d.raw_mq,0));
-    st('v_mq',  sv(d.volt_mq,3)+'V'); st('v_mq2', sv(d.volt_mq,3));
-    st('r_pm',  sv(d.raw_pm,0)); st('r_pm2',  sv(d.raw_pm,0));
-    st('r_hspd',sv(d.raw_hspd,0)); st('r_hspd2',sv(d.raw_hspd,0));
-    const vane=`${d.raw_hn??'-'}|${d.raw_he??'-'}|${d.raw_hs??'-'}|${d.raw_hw??'-'}`;
-    st('r_vane',vane); st('r_vane2',vane);
 
     $('net-dot').className='conn-dot';
     st('net-lbl','ONLINE');
@@ -1344,6 +1360,8 @@ fetchData();
 loadCharts();
 setInterval(fetchData,  2000);
 setInterval(loadCharts, 60000);
+setInterval(() => { if($('v_diag').classList.contains('active')) fetchDiag(); }, 3000);
+
 </script>
 </body>
 </html>
